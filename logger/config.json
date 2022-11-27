@@ -1,0 +1,11 @@
+{
+    "level": "debug",
+    "encoding": "json",
+    "outputPaths": ["stdout", "/logger.json"],
+    "errorOutputPaths": ["stderr"],
+    "encoderConfig": {
+      "messageKey": "message",
+      "levelKey": "level",
+      "levelEncoder": "lowercase"
+    }
+  }
