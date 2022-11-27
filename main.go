@@ -9,10 +9,11 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-redis/redis/v8"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-
+	godotenv.Load()
 	// init loger use zap
 	logger := logger.GetLogger()
 

@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )
 
@@ -31,7 +30,7 @@ type RedisSetup struct {
 // Get Default falue from redis setup
 // If .env not found
 func GetRedisSetup() RedisSetup {
-	godotenv.Load()
+
 	rs := RedisSetup{
 		Host:     "localhost:6379",
 		SelectDB: 14,
@@ -73,6 +72,12 @@ func GetZapLoggerSetup() zap.Config {
 	var cfg zap.Config
 	if err := json.Unmarshal(rawJSON, &cfg); err != nil {
 		panic(err)
+	}
+	if path := os.Getenv("LOG_PATH"); path != "" {
+		cfg.OutputPaths = []string{
+			"stdout",
+			path,
+		}
 	}
 	return cfg
 }
