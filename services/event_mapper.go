@@ -13,20 +13,23 @@ func NewEventMapper() Mapper {
 	return Mapper{}
 }
 
+// CreateEvent is function for build event
+// From data string and formated to models.Event
 func (m Mapper) CreateEvent(eventString string) {
 	logger := logger.GetLogger()
-	logger.AddData("eventString", eventString)
+	logger.AddData("event_string", eventString)
 	event := models.Event{}
 	err := json.Unmarshal([]byte(eventString), &event)
 	if err != nil {
 		logger.Log.Errorw(err.Error(), logger.Data()...)
 		return
 	}
-	// initiate repo interface
-	logger.AddData("event", event)
+	logger.AddData("event_struct", event)
+
+	// Initiate repo interface
 	var jobRepo repositories.Contract
 
-	// set which repository to use
+	// Set which repository to use
 	switch event.Type {
 	case models.API_EVENT:
 		jobRepo = repositories.NewJobAPI()
@@ -35,8 +38,8 @@ func (m Mapper) CreateEvent(eventString string) {
 		return
 	}
 
-	// run the command according to the repo type
-	// that has been set above
+	// Run the command according to the repo type
+	// That has been set above
 	if err = jobRepo.DoJob(eventString); err != nil {
 		logger.Log.Errorw(err.Error(), logger.Data()...)
 		return

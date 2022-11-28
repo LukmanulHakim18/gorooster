@@ -1,2 +1,4 @@
 .env
-logger/logs_data.json
+logger/data/
+.vscode/
+*.exe

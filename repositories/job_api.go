@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"event-scheduler/helpers"
+	"event-scheduler/logger"
 	"event-scheduler/models"
 	"fmt"
 	"net/http"
@@ -17,26 +18,50 @@ func NewJobAPI() Contract {
 	return jobAPIRepository{}
 }
 
-// execute the http request task built from the job api event
-func (jar jobAPIRepository) DoJob(evenString string) error {
-
-	if err := helpers.ExtractEvent(evenString, &jar.jobEvent); err != nil {
-		// log error
+// Runing job from data event
+// Vlidated Event
+func (jar jobAPIRepository) DoJob(eventString string) (err error) {
+	event := models.Event{
+		JobData: &jar.jobEvent,
+	}
+	if err := json.Unmarshal([]byte(eventString), &event); err != nil {
 		return err
 	}
-	if ok := jar.jobEvent.IsMethodSupport(); !ok {
-		// log error
-		return fmt.Errorf("mthod not support")
-	}
-	if err := jar.post(); err != nil {
+	if err = jar.jobEvent.Validat(); err != nil {
 		return err
 	}
-	return nil
 
+	// // Do retry n time if error send request
+	// for i := 1; i <= 3; i++ {
+	// 	logger.GetLogger().Log.Infof("%d attempt to send event with request id: %s", i, event.Id)
+	// 	err = jar.sendRequest()
+	// 	if err == nil {
+	// 		return nil
+	// 	}
+	// }
+	retryMode := helpers.EnvGetBool("RETRY_MODE", false)
+	if retryMode {
+		retryCount := helpers.EnvGetInt("RETRY_COUNT", 3)
+		return jar.retryManager(event.Id, retryCount)
+	}
+	return jar.sendRequest()
 }
 
-func (jar jobAPIRepository) post() error {
+// Do retry n time if error send request
+func (jar jobAPIRepository) retryManager(eventId string, retryCount int) (err error) {
+	for i := 1; i <= retryCount; i++ {
+		logger.GetLogger().Log.Infof("%d attempt to send event with request id: %s", i, eventId)
+		err = jar.sendRequest()
+		if err == nil {
+			return nil
+		}
+	}
+	return err
+}
 
+// Build Http request from Event.Data
+func (jar jobAPIRepository) sendRequest() error {
+	logger := logger.GetLogger()
 	payloadBytes, err := json.Marshal(jar.jobEvent.Data)
 	if err != nil {
 		return err
@@ -56,12 +81,23 @@ func (jar jobAPIRepository) post() error {
 	}
 	defer resp.Body.Close()
 
+	logger.AddData("status_code", resp.StatusCode)
 	// Success is indicated with 2xx status codes:
 	statusOK := resp.StatusCode >= 200 && resp.StatusCode < 300
 	if !statusOK {
 		return fmt.Errorf("error status code %d", resp.StatusCode)
 	}
- 	return nil
+
+	var res map[string]interface{}
+
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		logger.Log.Error("error read response body")
+	}
+	logger.AddData("response_body", res)
+
+	logger.Log.Infow("success_hit_endpoint", logger.Data()...)
+	return nil
 }
 
 func (jar jobAPIRepository) setHeaders(req *http.Request) {

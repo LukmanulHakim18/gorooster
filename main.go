@@ -5,9 +5,9 @@ import (
 	"event-scheduler/helpers"
 	"event-scheduler/logger"
 	"event-scheduler/services"
+	"fmt"
 	"os"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/go-redis/redis/v8"
 	"github.com/joho/godotenv"
 )
@@ -17,15 +17,15 @@ func main() {
 	// init loger use zap
 	logger := logger.GetLogger()
 
-	// Get setup redis
-	redisSetup := helpers.GetRedisSetup()
+	redisHost := helpers.EnvGetString("REDIS_SERVER_IP", "localhost:6379")
+	dbNumber := helpers.EnvGetInt("REDIS_SELECT_DB", 3)
 
-	logger.AddData("REDIS_SERVER_IP", redisSetup.Host)
-	logger.AddData("REDIS_SELECT_DB", redisSetup.SelectDB)
+	logger.AddData("REDIS_SERVER_IP", redisHost)
+	logger.AddData("REDIS_SELECT_DB", dbNumber)
 	// connect to redis
 	redisDB := redis.NewClient(&redis.Options{
-		Addr: redisSetup.Host,
-		DB:   redisSetup.SelectDB,
+		Addr: "localhost:6379",
+		DB:   3,
 	})
 
 	// this is telling redis to publish events since it's off by default.
@@ -36,8 +36,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", dbNumber)
 	// this is telling redis to subscribe to events published in the keyevent channel, specifically for expired events
-	pubsub := redisDB.PSubscribe(context.Background(), redisSetup.GenerateKeyEventChannel())
+	pubsub := redisDB.PSubscribe(context.Background(), KeyEventChannel)
 
 	logger.Log.Infow("start service ", logger.Data()...)
 
@@ -50,14 +51,21 @@ func main() {
 			logger.Log.Errorw(err.Error(), logger.Data()...)
 			break
 		}
-		spew.Dump(message.Payload)
 		key := message.Payload
 		dataKey, err := helpers.GetDataKey(key)
 		if err != nil {
 			logger.Log.Errorw(err.Error(), logger.Data()...)
 			continue
 		}
-		data := redisDB.Get(context.Background(), dataKey).Val()
+		// Get real data event from redis
+		ctx := context.Background()
+		data := redisDB.Get(ctx, dataKey).Val()
+
+		// Delete data from resis
+		if err = redisDB.Del(ctx, dataKey).Err(); err != nil {
+			logger.Log.Errorw(err.Error(), logger.Data()...)
+		}
+
 		go eventMapper.CreateEvent(data)
 	}
 }
