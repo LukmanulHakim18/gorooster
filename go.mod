@@ -1,4 +1,4 @@
-module event-scheduler
+module gorooster
 
 go 1.19
 

@@ -12,10 +12,10 @@ import (
 // Ex: event:foo -> data:foo
 func GetDataKey(eventKey string) (dataKey string, err error) {
 	sliceKey := strings.Split(eventKey, ":")
-	if len(sliceKey) != 2 {
+	if len(sliceKey) != 3 {
 		return dataKey, fmt.Errorf("event key not valid : %s len %d", eventKey, len(sliceKey))
 	}
-	return fmt.Sprintf("data:%s", sliceKey[1]), err
+	return fmt.Sprintf("%s:data:%s", sliceKey[0], sliceKey[2]), err
 }
 
 // Setup zap.config and locaition file

@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"event-scheduler/helpers"
+	"gorooster/helpers"
 
 	"go.uber.org/zap"
 )

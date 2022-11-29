@@ -3,10 +3,10 @@ package repositories
 import (
 	"bytes"
 	"encoding/json"
-	"event-scheduler/helpers"
-	"event-scheduler/logger"
-	"event-scheduler/models"
 	"fmt"
+	"gorooster/helpers"
+	"gorooster/logger"
+	"gorooster/models"
 	"net/http"
 )
 

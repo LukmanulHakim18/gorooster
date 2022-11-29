@@ -2,9 +2,9 @@ package services
 
 import (
 	"encoding/json"
-	"event-scheduler/logger"
-	"event-scheduler/models"
-	"event-scheduler/repositories"
+	"gorooster/logger"
+	"gorooster/models"
+	"gorooster/repositories"
 )
 
 type Mapper struct{}
@@ -44,6 +44,6 @@ func (m Mapper) CreateEvent(eventString string) {
 		logger.Log.Errorw(err.Error(), logger.Data()...)
 		return
 	}
-	logger.Log.Infow("Success", logger.Data()...)
+	logger.Log.Infow("success", logger.Data()...)
 
 }

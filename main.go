@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"event-scheduler/helpers"
-	"event-scheduler/logger"
-	"event-scheduler/services"
 	"fmt"
+	"gorooster/helpers"
+	"gorooster/logger"
+	"gorooster/services"
 	"os"
 
 	"github.com/go-redis/redis/v8"
@@ -57,6 +57,8 @@ func main() {
 			logger.Log.Errorw(err.Error(), logger.Data()...)
 			continue
 		}
+		logger.AddData("event_key", key)
+		logger.AddData("data_key", dataKey)
 		// Get real data event from redis
 		ctx := context.Background()
 		data := redisDB.Get(ctx, dataKey).Val()
