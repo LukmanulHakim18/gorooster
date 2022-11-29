@@ -19,7 +19,7 @@ func NewJobAPI() Contract {
 }
 
 // Runing job from data event
-// Vlidated Event
+// Validate Event
 func (jar jobAPIRepository) DoJob(eventString string) (err error) {
 	event := models.Event{
 		JobData: &jar.jobEvent,
@@ -27,18 +27,11 @@ func (jar jobAPIRepository) DoJob(eventString string) (err error) {
 	if err := json.Unmarshal([]byte(eventString), &event); err != nil {
 		return err
 	}
-	if err = jar.jobEvent.Validat(); err != nil {
+	if err = jar.jobEvent.Validate(); err != nil {
 		return err
 	}
 
-	// // Do retry n time if error send request
-	// for i := 1; i <= 3; i++ {
-	// 	logger.GetLogger().Log.Infof("%d attempt to send event with request id: %s", i, event.Id)
-	// 	err = jar.sendRequest()
-	// 	if err == nil {
-	// 		return nil
-	// 	}
-	// }
+	// Get config from env file, is in retry mode
 	retryMode := helpers.EnvGetBool("RETRY_MODE", false)
 	if retryMode {
 		retryCount := helpers.EnvGetInt("RETRY_COUNT", 3)

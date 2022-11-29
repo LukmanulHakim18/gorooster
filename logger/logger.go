@@ -23,17 +23,6 @@ func GetLogger() *LoggerImpl {
 	return logger
 }
 
-// func (li LoggerImpl) Info(msg string) {
-
-// 	li.log.Infow(msg, li.data...)
-
-// }
-// func (li LoggerImpl) Error(msg string) {
-
-// 	li.log.Infow(msg, li.data...)
-// }
-// func (li LoggerImpl) Debug(msg string) {}
-
 func (li *LoggerImpl) AddData(key string, value any) {
 	li.data = append(li.data, key)
 	li.data = append(li.data, value)

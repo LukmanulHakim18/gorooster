@@ -1,6 +1,9 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Headers struct {
 	Key   string `json:"key"`
@@ -24,15 +27,20 @@ type JobAPI struct {
 	Data     any        `json:"data"`
 }
 
+// Check if methode support or not
 func (ja JobAPI) IsMethodSupport() bool {
 	return ja.Method == METHOD_POST || ja.Method == METHOD_GET || ja.Method == METHOD_PUT || ja.Method == METHOD_DELETE || ja.Method == METHOD_PATCH
 }
 
+// parsing  methode to string
 func (m MethodType) ToString() string {
 	return string(m)
 }
 
-func (ja JobAPI) Validat() error {
+// Validate data Job API
+func (ja *JobAPI) Validate() error {
+	methodeType := strings.ToUpper(ja.Method.ToString())
+	ja.Method = MethodType(methodeType)
 	if ok := ja.IsMethodSupport(); !ok {
 		return fmt.Errorf("method not support")
 	}

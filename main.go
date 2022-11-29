@@ -28,7 +28,7 @@ func main() {
 		DB:   3,
 	})
 
-	// this is telling redis to publish events since it's off by default.
+	// This is telling redis to publish events since it's off by default.
 	// https://redis.io/docs/manual/keyspace-notifications/
 	_, err := redisDB.Do(context.Background(), "CONFIG", "SET", "notify-keyspace-events", "KEA").Result()
 	if err != nil {
@@ -43,9 +43,9 @@ func main() {
 	logger.Log.Infow("start service ", logger.Data()...)
 
 	eventMapper := services.NewEventMapper()
-	// infinite loop
+	// Infinite loop for listening event
 	for {
-		// this listens in the background for messages.
+		// This listens in the background for messages.
 		message, err := pubsub.ReceiveMessage(context.Background())
 		if err != nil {
 			logger.Log.Errorw(err.Error(), logger.Data()...)

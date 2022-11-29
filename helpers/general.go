@@ -18,10 +18,7 @@ func GetDataKey(eventKey string) (dataKey string, err error) {
 	return fmt.Sprintf("data:%s", sliceKey[1]), err
 }
 
-// Generate channel name use db selected
-// This channel listening key expired
-// And triger event by key
-
+// Setup zap.config and locaition file
 func GetZapLoggerSetup() zap.Config {
 	cfg := zap.NewProductionConfig()
 	if path := os.Getenv("LOG_PATH"); path != "" {
