@@ -9,7 +9,7 @@ import (
 )
 
 // Generate Data-Key from Event-Key
-// Ex: event:foo -> data:foo
+// Ex: client:event:foo -> client:data:foo
 func GetDataKey(eventKey string) (dataKey string, err error) {
 	sliceKey := strings.Split(eventKey, ":")
 	if len(sliceKey) != 3 {
@@ -28,4 +28,19 @@ func GetZapLoggerSetup() zap.Config {
 		}
 	}
 	return cfg
+}
+
+func GenerateKeyEvent(clientName, key string) string {
+	keyEvent := fmt.Sprintf("%s:event:%s", clientName, key)
+	return keyEvent
+}
+
+func GenerateKeyData(clientName, key string) string {
+	keyData := fmt.Sprintf("%s:data:%s", clientName, key)
+	return keyData
+}
+
+func ValidatorClinetNameAndKey(str string) bool {
+	return !strings.Contains(str, ":") && str != ""
+
 }

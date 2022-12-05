@@ -1,6 +1,8 @@
 package services
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMapping(t *testing.T) {
 	es := `
