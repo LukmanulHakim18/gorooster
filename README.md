@@ -69,7 +69,7 @@ After server running and you want to make event and maintain event, make request
 ## Create event
 
 1. Endpoint
-   ```http
+   ```
    {base-url}/event/{event-key}/{event-relese-in}
    ```
 
@@ -80,7 +80,7 @@ After server running and you want to make event and maintain event, make request
 2. Methode POST
 3. Header
 
-   ```http
+   ```
    X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
    ```
@@ -121,14 +121,14 @@ After server running and you want to make event and maintain event, make request
 
 1. Endpoint
 
-   ```http
+   ```
    {base-url}/event/{event-key}
    ```
 
 2. Methode GET
 3. Header
 
-   ```http
+   ```
    X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
    ```
@@ -137,14 +137,14 @@ After server running and you want to make event and maintain event, make request
 
 1. Endpoint
 
-   ```http
+   ```
    {base-url}/event/{event-key}/{event-relese-in}
    ```
 
 2. Methode `PUT`
 3. Header
 
-   ```http
+   ```
    X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
    ```
@@ -153,14 +153,14 @@ After server running and you want to make event and maintain event, make request
 
 1. Endpoint
 
-   ```http
+   ```
    {base-url}/event/{event-key}
    ```
 
 2. Methode `PUT`
 3. Header
 
-   ```http
+   ```
    X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
    ```
@@ -200,13 +200,13 @@ After server running and you want to make event and maintain event, make request
 ## Delete event
 
 1. Endpoint
-   ```http
+   ```
    {base-url}/event/{event-key}
    ```
 2. Methode `DELETE`
 3. Header
 
-   ```http
+   ```
    X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
    ```
