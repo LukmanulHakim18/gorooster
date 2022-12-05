@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gorooster/database"
-	"gorooster/helpers"
-	"gorooster/models"
+	"github.com/LukmanulHakim18/gorooster/database"
+	"github.com/LukmanulHakim18/gorooster/helpers"
+	"github.com/LukmanulHakim18/gorooster/models"
 	"time"
 )
 

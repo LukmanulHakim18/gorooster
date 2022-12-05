@@ -3,9 +3,9 @@ package services
 import (
 	"context"
 	"fmt"
-	"gorooster/database"
-	"gorooster/helpers"
-	"gorooster/logger"
+	"github.com/LukmanulHakim18/gorooster/database"
+	"github.com/LukmanulHakim18/gorooster/helpers"
+	"github.com/LukmanulHakim18/gorooster/logger"
 	"os"
 )
 

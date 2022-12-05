@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"gorooster/helpers"
+	"github.com/LukmanulHakim18/gorooster/helpers"
 
 	"go.uber.org/zap"
 )

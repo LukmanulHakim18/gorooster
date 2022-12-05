@@ -1,7 +1,7 @@
 package router
 
 import (
-	"gorooster/controllers"
+	"github.com/LukmanulHakim18/gorooster/controllers"
 	"net/http"
 
 	"github.com/go-chi/chi"

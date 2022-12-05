@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"gorooster/database"
-	"gorooster/helpers"
-	"gorooster/logger"
-	"gorooster/models"
-	"gorooster/services"
+	"github.com/LukmanulHakim18/gorooster/database"
+	"github.com/LukmanulHakim18/gorooster/helpers"
+	"github.com/LukmanulHakim18/gorooster/logger"
+	"github.com/LukmanulHakim18/gorooster/models"
+	"github.com/LukmanulHakim18/gorooster/services"
 	"net/http"
 	"time"
 

@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"gorooster/helpers"
-	"gorooster/logger"
-	"gorooster/models"
+	"github.com/LukmanulHakim18/gorooster/helpers"
+	"github.com/LukmanulHakim18/gorooster/logger"
+	"github.com/LukmanulHakim18/gorooster/models"
 	"net/http"
 )
 

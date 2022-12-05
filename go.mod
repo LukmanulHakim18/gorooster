@@ -1,4 +1,4 @@
-module gorooster
+module github.com/LukmanulHakim18/gorooster
 
 go 1.19
 

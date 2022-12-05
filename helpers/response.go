@@ -3,7 +3,7 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
-	"gorooster/models"
+	"github.com/LukmanulHakim18/gorooster/models"
 	"net/http"
 )
 

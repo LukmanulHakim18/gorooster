@@ -2,9 +2,9 @@ package services
 
 import (
 	"encoding/json"
-	"gorooster/logger"
-	"gorooster/models"
-	"gorooster/repositories"
+	"github.com/LukmanulHakim18/gorooster/logger"
+	"github.com/LukmanulHakim18/gorooster/models"
+	"github.com/LukmanulHakim18/gorooster/repositories"
 )
 
 type Mapper struct{}

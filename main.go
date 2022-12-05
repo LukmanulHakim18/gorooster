@@ -1,10 +1,10 @@
 package main
 
 import (
-	"gorooster/database"
-	"gorooster/helpers"
-	"gorooster/router"
-	"gorooster/services"
+	"github.com/LukmanulHakim18/gorooster/database"
+	"github.com/LukmanulHakim18/gorooster/helpers"
+	"github.com/LukmanulHakim18/gorooster/router"
+	"github.com/LukmanulHakim18/gorooster/services"
 	"net/http"
 
 	"github.com/joho/godotenv"
