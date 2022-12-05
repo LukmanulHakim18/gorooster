@@ -3,6 +3,7 @@ module gorooster
 go 1.19
 
 require (
+	github.com/go-chi/chi v1.5.4
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/joho/godotenv v1.4.0
 	go.uber.org/zap v1.23.0

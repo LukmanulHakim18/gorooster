@@ -34,7 +34,7 @@ func (m Mapper) CreateEvent(eventString string) {
 	case models.API_EVENT:
 		jobRepo = repositories.NewJobAPI()
 	default:
-		logger.Log.Errorw("Unknown event type", logger.Data()...)
+		logger.Log.Errorw("unknown event type", logger.Data()...)
 		return
 	}
 
@@ -44,6 +44,5 @@ func (m Mapper) CreateEvent(eventString string) {
 		logger.Log.Errorw(err.Error(), logger.Data()...)
 		return
 	}
-	logger.Log.Infow("success", logger.Data()...)
-
+	logger.Log.Infow("successfully do job", logger.Data()...)
 }
