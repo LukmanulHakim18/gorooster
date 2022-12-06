@@ -2,6 +2,7 @@ package services
 
 import (
 	"encoding/json"
+
 	"github.com/LukmanulHakim18/gorooster/logger"
 	"github.com/LukmanulHakim18/gorooster/models"
 	"github.com/LukmanulHakim18/gorooster/repositories"
@@ -45,4 +46,5 @@ func (m Mapper) CreateEvent(eventString string) {
 		return
 	}
 	logger.Log.Infow("successfully do job", logger.Data()...)
+	logger.ClearData()
 }

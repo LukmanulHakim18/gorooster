@@ -3,10 +3,11 @@ package services
 import (
 	"context"
 	"fmt"
+	"os"
+
 	"github.com/LukmanulHakim18/gorooster/database"
 	"github.com/LukmanulHakim18/gorooster/helpers"
 	"github.com/LukmanulHakim18/gorooster/logger"
-	"os"
 )
 
 func StartEventListener(client database.RedisClient) {
@@ -32,6 +33,7 @@ func StartEventListener(client database.RedisClient) {
 	eventMapper := NewEventMapper()
 	// Infinite loop for listening event
 	for {
+		logger.ClearData()
 		// This listens in the background for messages.
 		message, err := pubsub.ReceiveMessage(context.Background())
 		if err != nil {
@@ -49,7 +51,10 @@ func StartEventListener(client database.RedisClient) {
 		// Get real data event from redis
 		ctx := context.Background()
 		dataEventStr := client.DB.Get(ctx, dataKey).Val()
-
+		if dataEventStr == "" {
+			logger.Log.Errorw("empty_dataEventStr", logger.Data()...)
+			continue
+		}
 		// Delete data from resis
 		if err = client.DB.Del(ctx, dataKey).Err(); err != nil {
 			logger.Log.Errorw(err.Error(), logger.Data()...)
