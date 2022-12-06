@@ -3,7 +3,7 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/LukmanulHakim18/gorooster/models"
+	"git.bluebird.id/mybb/gorooster/models"
 	"net/http"
 )
 

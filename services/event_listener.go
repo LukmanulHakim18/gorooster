@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LukmanulHakim18/gorooster/database"
-	"github.com/LukmanulHakim18/gorooster/helpers"
-	"github.com/LukmanulHakim18/gorooster/logger"
+	"git.bluebird.id/mybb/gorooster/database"
+	"git.bluebird.id/mybb/gorooster/helpers"
+	"git.bluebird.id/mybb/gorooster/logger"
 )
 
 func StartEventListener(client database.RedisClient) {

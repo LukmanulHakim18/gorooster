@@ -3,7 +3,7 @@
 Gorooster is an event scheduler that can schedule the events you want.
 For now, Gorooster only provides events in the form of API requests.
 
-For ease of use it would be nice to use [gorooster-client](https://"github.com/LukmanulHakim18/gorooster.git) as a remote to the server. But if you want to use rest-api go ahead we provide that.
+For ease of use it would be nice to use [gorooster-client](https://"git.bluebird.id/mybb/gorooster.git) as a remote to the server. But if you want to use rest-api go ahead we provide that.
 
 # Features
 
@@ -18,7 +18,7 @@ For ease of use it would be nice to use [gorooster-client](https://"github.com/L
 Gorooster requires a Go version with modules support.
 
 ```git
-git clone https://"github.com/LukmanulHakim18/gorooster.git
+git clone https://"git.bluebird.id/mybb/gorooster.git
 ```
 
 So make sure instal the dependency in your local:

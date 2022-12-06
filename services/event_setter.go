@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/LukmanulHakim18/gorooster/database"
-	"github.com/LukmanulHakim18/gorooster/helpers"
-	"github.com/LukmanulHakim18/gorooster/models"
+	"git.bluebird.id/mybb/gorooster/database"
+	"git.bluebird.id/mybb/gorooster/helpers"
+	"git.bluebird.id/mybb/gorooster/models"
 	"time"
 )
 

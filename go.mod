@@ -1,4 +1,4 @@
-module github.com/LukmanulHakim18/gorooster
+module git.bluebird.id/mybb/gorooster
 
 go 1.19
 

@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/LukmanulHakim18/gorooster/database"
-	"github.com/LukmanulHakim18/gorooster/helpers"
-	"github.com/LukmanulHakim18/gorooster/logger"
-	"github.com/LukmanulHakim18/gorooster/models"
-	"github.com/LukmanulHakim18/gorooster/services"
+	"git.bluebird.id/mybb/gorooster/database"
+	"git.bluebird.id/mybb/gorooster/helpers"
+	"git.bluebird.id/mybb/gorooster/logger"
+	"git.bluebird.id/mybb/gorooster/models"
+	"git.bluebird.id/mybb/gorooster/services"
 	"net/http"
 	"time"
 

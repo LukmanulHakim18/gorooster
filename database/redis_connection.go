@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/LukmanulHakim18/gorooster/helpers"
+	"git.bluebird.id/mybb/gorooster/helpers"
 	"sync"
 
 	"github.com/go-redis/redis/v8"

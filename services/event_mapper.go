@@ -3,9 +3,9 @@ package services
 import (
 	"encoding/json"
 
-	"github.com/LukmanulHakim18/gorooster/logger"
-	"github.com/LukmanulHakim18/gorooster/models"
-	"github.com/LukmanulHakim18/gorooster/repositories"
+	"git.bluebird.id/mybb/gorooster/logger"
+	"git.bluebird.id/mybb/gorooster/models"
+	"git.bluebird.id/mybb/gorooster/repositories"
 )
 
 type Mapper struct{}
