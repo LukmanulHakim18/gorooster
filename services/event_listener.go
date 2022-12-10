@@ -8,24 +8,31 @@ import (
 	"git.bluebird.id/mybb/gorooster/database"
 	"git.bluebird.id/mybb/gorooster/helpers"
 	"git.bluebird.id/mybb/gorooster/logger"
+	"github.com/go-redis/redis/v8"
 )
 
-func StartEventListener(client *database.RedisClient) {
+func StartEventListeners(client *database.RedisClient) {
+	for dbNumber, client := range client.DB {
+		go StartEventListener(dbNumber, client)
+	}
+}
+
+func StartEventListener(dbNumber int, client *redis.Client) {
 	// init loger use zap
 	logger := logger.GetLogger()
 	// This is telling redis to publish events since it's off by default.
 	// https://redis.io/docs/manual/keyspace-notifications/
-	_, err := client.DB.Do(context.Background(), "CONFIG", "SET", "notify-keyspace-events", "KEA").Result()
+	_, err := client.Do(context.Background(), "CONFIG", "SET", "notify-keyspace-events", "KEA").Result()
 	if err != nil {
 		logger.Log.Errorf("unable to set keyspace events %s", err.Error())
 		os.Exit(1)
 	}
 
-	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", client.DBNumber)
+	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", dbNumber)
 	logger.AddData("key_event_channel", KeyEventChannel)
 
 	// this is telling redis to subscribe to events published in the keyevent channel, specifically for expired events
-	pubsub := client.DB.PSubscribe(context.Background(), KeyEventChannel)
+	pubsub := client.PSubscribe(context.Background(), KeyEventChannel)
 
 	logger.Log.Infow("start service ", logger.Data()...)
 	logger.ClearData()

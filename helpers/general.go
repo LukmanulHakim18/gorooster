@@ -34,6 +34,10 @@ func GenerateKeyEvent(clientName, key string) string {
 	keyEvent := fmt.Sprintf("%s:event:%s", clientName, key)
 	return keyEvent
 }
+func GenerateKeyIndex(clientName, key string) string {
+	keyEvent := fmt.Sprintf("index:%s:%s", clientName, key)
+	return keyEvent
+}
 
 func GenerateKeyData(clientName, key string) string {
 	keyData := fmt.Sprintf("%s:data:%s", clientName, key)

@@ -39,6 +39,6 @@ func TestMapping(t *testing.T) {
 	  }
 	`
 	RedisClient := database.GetRedisClient()
-	NewEventMapper().CreateEvent(context.Background(), RedisClient, es)
+	NewEventMapper().CreateEvent(context.Background(), RedisClient.DB[1], es)
 	// t.Log(res)
 }

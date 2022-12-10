@@ -1,8 +1,9 @@
 package database
 
 import (
-	"git.bluebird.id/mybb/gorooster/helpers"
 	"sync"
+
+	"git.bluebird.id/mybb/gorooster/helpers"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -12,25 +13,41 @@ var once sync.Once
 var redisClient *RedisClient
 
 type RedisClient struct {
-	DB       *redis.Client
-	DBNumber int
+	DB        map[int]*redis.Client
+	DBIndex   *redis.Client
+	DBPointer int
+	UseDB     int
 }
 
 func GetRedisClient() *RedisClient {
 
 	once.Do(func() {
 		if redisClient == nil {
+			redisClient = &RedisClient{
+				DB:        map[int]*redis.Client{},
+				DBPointer: 1,
+				UseDB:     helpers.EnvGetInt("USE_DATABASE", 3),
+			}
 
-			redisDB := redis.NewClient(&redis.Options{
+			for i := 1; i <= redisClient.UseDB; i++ {
+				redisClient.DB[i] = redis.NewClient(&redis.Options{
+					Addr:     helpers.EnvGetString("REDIS_SERVER_IP", "localhost:6379"),
+					Password: helpers.EnvGetString("REDIS_PASSWORD", ""),
+					DB:       i,
+				})
+			}
+			redisClient.DBIndex = redis.NewClient(&redis.Options{
 				Addr:     helpers.EnvGetString("REDIS_SERVER_IP", "localhost:6379"),
 				Password: helpers.EnvGetString("REDIS_PASSWORD", ""),
-				DB:       helpers.EnvGetInt("REDIS_SELECT_DB", 3),
+				DB:       0,
 			})
-			redisClient = &RedisClient{
-				DB:       redisDB,
-				DBNumber: helpers.EnvGetInt("REDIS_SELECT_DB", 3),
-			}
 		}
 	})
 	return redisClient
+}
+func (rc *RedisClient) Next() {
+	rc.DBPointer++
+	if rc.DBPointer > rc.UseDB {
+		rc.DBPointer = 1
+	}
 }
