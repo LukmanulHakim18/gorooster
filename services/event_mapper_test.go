@@ -1,7 +1,10 @@
 package services
 
 import (
+	"context"
 	"testing"
+
+	"git.bluebird.id/mybb/gorooster/database"
 )
 
 func TestMapping(t *testing.T) {
@@ -35,6 +38,7 @@ func TestMapping(t *testing.T) {
 		}
 	  }
 	`
-	NewEventMapper().CreateEvent(es)
+	RedisClient := database.GetRedisClient()
+	NewEventMapper().CreateEvent(context.Background(), RedisClient, es)
 	// t.Log(res)
 }

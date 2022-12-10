@@ -15,7 +15,7 @@ func main() {
 
 	RedisClient := database.GetRedisClient()
 
-	go services.StartEventListener(*RedisClient)
+	go services.StartEventListener(RedisClient)
 
 	if err := http.ListenAndServe(helpers.EnvGetString("RUNING_PORT", ":1407"), router.GetRouter()); err != nil {
 		panic(err)

@@ -18,7 +18,7 @@ func NewEventMapper() Mapper {
 
 // CreateEvent is function for build event
 // From data string and formated to models.Event
-func (m Mapper) CreateEvent(ctx context.Context, client database.RedisClient, dataKey string) {
+func (m Mapper) CreateEvent(ctx context.Context, client *database.RedisClient, dataKey string) {
 	logger := logger.GetLogger()
 
 	eventString := client.DB.Get(ctx, dataKey).Val() // Get real data event from redis

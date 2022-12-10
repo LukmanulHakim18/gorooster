@@ -10,7 +10,7 @@ import (
 	"git.bluebird.id/mybb/gorooster/logger"
 )
 
-func StartEventListener(client database.RedisClient) {
+func StartEventListener(client *database.RedisClient) {
 	// init loger use zap
 	logger := logger.GetLogger()
 	// This is telling redis to publish events since it's off by default.
