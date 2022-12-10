@@ -1,8 +1,10 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 
+	"git.bluebird.id/mybb/gorooster/database"
 	"git.bluebird.id/mybb/gorooster/logger"
 	"git.bluebird.id/mybb/gorooster/models"
 	"git.bluebird.id/mybb/gorooster/repositories"
@@ -16,8 +18,18 @@ func NewEventMapper() Mapper {
 
 // CreateEvent is function for build event
 // From data string and formated to models.Event
-func (m Mapper) CreateEvent(eventString string) {
+func (m Mapper) CreateEvent(ctx context.Context, client database.RedisClient, dataKey string) {
 	logger := logger.GetLogger()
+
+	eventString := client.DB.Get(ctx, dataKey).Val() // Get real data event from redis
+	if eventString == "" {
+		logger.Log.Errorw("empty_dataEventStr", logger.Data()...)
+		return
+	}
+
+	if err := client.DB.Del(ctx, dataKey).Err(); err != nil { // Delete data from redis
+		logger.Log.Errorw(err.Error(), logger.Data()...)
+	}
 	logger.AddData("event_string", eventString)
 	event := models.Event{}
 	err := json.Unmarshal([]byte(eventString), &event)

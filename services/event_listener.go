@@ -31,11 +31,12 @@ func StartEventListener(client database.RedisClient) {
 	logger.ClearData()
 
 	eventMapper := NewEventMapper()
-	// Infinite loop for listening event
+	ctx := context.Background()
 	for {
 		logger.ClearData()
+		// Infinite loop for listening event
 		// This listens in the background for messages.
-		message, err := pubsub.ReceiveMessage(context.Background())
+		message, err := pubsub.ReceiveMessage(ctx)
 		if err != nil {
 			logger.Log.Errorw(err.Error(), logger.Data()...)
 			break
@@ -49,17 +50,8 @@ func StartEventListener(client database.RedisClient) {
 		logger.AddData("event_key", key)
 		logger.AddData("data_key", dataKey)
 		// Get real data event from redis
-		ctx := context.Background()
-		dataEventStr := client.DB.Get(ctx, dataKey).Val()
-		if dataEventStr == "" {
-			logger.Log.Errorw("empty_dataEventStr", logger.Data()...)
-			continue
-		}
-		// Delete data from resis
-		if err = client.DB.Del(ctx, dataKey).Err(); err != nil {
-			logger.Log.Errorw(err.Error(), logger.Data()...)
-		}
+
 		logger.Log.Infow("create_event", logger.Data()...)
-		go eventMapper.CreateEvent(dataEventStr)
+		go eventMapper.CreateEvent(ctx, client, dataKey)
 	}
 }
