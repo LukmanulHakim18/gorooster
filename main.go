@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	"git.bluebird.id/mybb/gorooster/database"
-	"git.bluebird.id/mybb/gorooster/helpers"
-	"git.bluebird.id/mybb/gorooster/router"
-	"git.bluebird.id/mybb/gorooster/services"
+	"git.bluebird.id/mybb/gorooster/v2/database"
+	"git.bluebird.id/mybb/gorooster/v2/helpers"
+	"git.bluebird.id/mybb/gorooster/v2/router"
+	"git.bluebird.id/mybb/gorooster/v2/services"
 
 	"github.com/joho/godotenv"
 )

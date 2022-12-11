@@ -1,4 +1,4 @@
-module git.bluebird.id/mybb/gorooster
+module git.bluebird.id/mybb/gorooster/v2
 
 go 1.19
 

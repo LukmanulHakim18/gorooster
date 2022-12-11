@@ -3,8 +3,9 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
-	"git.bluebird.id/mybb/gorooster/models"
 	"net/http"
+
+	"git.bluebird.id/mybb/gorooster/v2/models"
 )
 
 func ResponseSuccessWithData(w http.ResponseWriter, statusCode int, payload any) {
@@ -37,7 +38,8 @@ func ResponseErrorWithData(w http.ResponseWriter, errFmt *Error) {
 // ================================ success format ================================
 type SuccessResponse struct {
 	Event          models.Event `json:"event"`
-	EventReleaseIn string       `json:"event_release_in"`
+	EventReleaseIn string       `json:"event_release_in,omitempty"`
+	EventReleaseAt int64        `json:"event_release_at,omitempty"`
 }
 
 // ================================ error format ================================
@@ -100,5 +102,14 @@ var ErrorReadBody = &Error{
 	LocalizedMessage: Message{
 		English:   "failed to read data",
 		Indonesia: "gagal membaca data",
+	},
+}
+var ErrorTimeReleaseAt = &Error{
+	StatusCode:   http.StatusBadRequest,
+	ErrorCode:    "CROW-401",
+	ErrorMessage: "unable to release past events.",
+	LocalizedMessage: Message{
+		English:   "unable to release past events.",
+		Indonesia: "tidak dapat merilis event masa lalu.",
 	},
 }

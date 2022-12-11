@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"git.bluebird.id/mybb/gorooster/database"
-	"git.bluebird.id/mybb/gorooster/helpers"
-	"git.bluebird.id/mybb/gorooster/logger"
+	"git.bluebird.id/mybb/gorooster/v2/database"
+	"git.bluebird.id/mybb/gorooster/v2/helpers"
+	"git.bluebird.id/mybb/gorooster/v2/logger"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -58,7 +58,7 @@ func StartEventListener(dbNumber int, client *redis.Client) {
 		logger.AddData("data_key", dataKey)
 		// Get real data event from redis
 
-		logger.Log.Infow("create_event", logger.Data()...)
+		go logger.Log.Infow("create_event", logger.Data()...)
 		go eventMapper.CreateEvent(ctx, client, dataKey)
 	}
 }

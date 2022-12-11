@@ -3,7 +3,7 @@ package database
 import (
 	"sync"
 
-	"git.bluebird.id/mybb/gorooster/helpers"
+	"git.bluebird.id/mybb/gorooster/v2/helpers"
 
 	"github.com/go-redis/redis/v8"
 )

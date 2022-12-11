@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"git.bluebird.id/mybb/gorooster/helpers"
-	"git.bluebird.id/mybb/gorooster/logger"
-	"git.bluebird.id/mybb/gorooster/models"
 	"net/http"
+
+	"git.bluebird.id/mybb/gorooster/v2/helpers"
+	"git.bluebird.id/mybb/gorooster/v2/logger"
+	"git.bluebird.id/mybb/gorooster/v2/models"
 )
 
 type jobAPIRepository struct {
@@ -43,7 +44,7 @@ func (jar jobAPIRepository) DoJob(eventString string) (err error) {
 // Do retry n time if error send request
 func (jar jobAPIRepository) retryManager(eventId string, retryCount int) (err error) {
 	for i := 1; i <= retryCount; i++ {
-		logger.GetLogger().Log.Infof("%d attempt to send event with request id: %s", i, eventId)
+		go logger.GetLogger().Log.Infof("%d attempt to send event with request id: %s", i, eventId)
 		err = jar.sendRequest()
 		if err == nil {
 			return nil
@@ -85,11 +86,11 @@ func (jar jobAPIRepository) sendRequest() error {
 
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
-		logger.Log.Error("error read response body")
+		go logger.Log.Error("error read response body")
 	}
 	logger.AddData("response_body", res)
 
-	logger.Log.Infow("success_hit_endpoint", logger.Data()...)
+	go logger.Log.Infow("success_hit_endpoint", logger.Data()...)
 	return nil
 }
 
