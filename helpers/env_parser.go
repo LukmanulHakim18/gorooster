@@ -3,6 +3,7 @@ package helpers
 import (
 	"os"
 	"strconv"
+	"time"
 )
 
 // Get Value(int) from env
@@ -27,6 +28,15 @@ func EnvGetString(key string, defaultValue string) string {
 // And give default value if err parsing
 func EnvGetBool(key string, defaultValue bool) bool {
 	if val, err := strconv.ParseBool(os.Getenv((key))); err == nil {
+		return val
+	}
+	return defaultValue
+}
+
+// Get Value(bool) from env
+// And give default value if err parsing
+func EnvGetTimeDuration(key string, defaultValue time.Duration) time.Duration {
+	if val, err := time.ParseDuration(os.Getenv((key))); err != nil {
 		return val
 	}
 	return defaultValue

@@ -8,6 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	ReleaseEventIN = "IN"
+	ReleaseEventAT = "AT"
+)
+
 // Generate Data-Key from Event-Key
 // Ex: client:event:foo -> client:data:foo
 func GetDataKey(eventKey string) (dataKey string, err error) {
@@ -46,5 +51,12 @@ func GenerateKeyData(clientName, key string) string {
 
 func ValidatorClinetNameAndKey(str string) bool {
 	return !strings.Contains(str, ":") && str != ""
+}
 
+func RelaseEventFormator(ReleaseEventFormat string) string {
+	if ReleaseEventFormat == "" {
+		ReleaseEventFormat = ReleaseEventIN
+	}
+	ReleaseEventFormat = strings.ToUpper(ReleaseEventFormat)
+	return ReleaseEventFormat
 }

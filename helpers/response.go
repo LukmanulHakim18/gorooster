@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"git.bluebird.id/mybb/gorooster/v2/models"
 )
@@ -40,6 +41,18 @@ type SuccessResponse struct {
 	Event          models.Event `json:"event"`
 	EventReleaseIn string       `json:"event_release_in,omitempty"`
 	EventReleaseAt int64        `json:"event_release_at,omitempty"`
+}
+
+func (sr *SuccessResponse) SetEventRelease(releaseEventFormat string, eventReleaseIn time.Duration) {
+	switch releaseEventFormat {
+	case ReleaseEventAT:
+		sr.EventReleaseAt = time.Now().Add(eventReleaseIn).Unix()
+	case ReleaseEventIN:
+		sr.EventReleaseIn = eventReleaseIn.String()
+	default:
+		sr.EventReleaseAt = time.Now().Add(eventReleaseIn).Unix()
+		sr.EventReleaseIn = eventReleaseIn.String()
+	}
 }
 
 // ================================ error format ================================
@@ -111,5 +124,15 @@ var ErrorTimeReleaseAt = &Error{
 	LocalizedMessage: Message{
 		English:   "unable to release past events.",
 		Indonesia: "tidak dapat merilis event masa lalu.",
+	},
+}
+
+var ErrorDuplicateKey = &Error{
+	StatusCode:   http.StatusBadRequest,
+	ErrorCode:    "CROW-402",
+	ErrorMessage: "duplicat key.",
+	LocalizedMessage: Message{
+		English:   "duplicat key.",
+		Indonesia: "kunci duplikat.",
 	},
 }
