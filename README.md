@@ -7,9 +7,11 @@ For ease of use it would be nice to use [gorooster-client](https://"git.bluebird
 
 # Features
 
-- Set event
+- Set event release In
+- Set event release At
+- Update release event in
+- Update release event an
 - Get event
-- Update release event
 - Update data event
 - Delete event
 
@@ -17,14 +19,14 @@ For ease of use it would be nice to use [gorooster-client](https://"git.bluebird
 
 Gorooster requires a Go version with modules support.
 
-```git
-git clone https://"git.bluebird.id/mybb/gorooster/v2.git
+```
+  git clone https://"git.bluebird.id/mybb/gorooster/v2.git
 ```
 
 So make sure instal the dependency in your local:
 
 ```go
-go mod tidy
+  go mod tidy
 ```
 
 # Setup
@@ -39,8 +41,8 @@ REDIS_SELECT_DB= 14
 
 This service runs on the default port: `1407` but if you want to change it, just add the following code to the .env file
 
-```env
-RUNING_PORT=: 1407
+```
+RUNING_PORT= :1407
 ```
 
 This service also has a retry fire event mode, if the endpoint that is scheduled to be requested returns a response code not 2xx. Then this mode will retry hit until it succeeds or until reach the `RETRY_COUNT`.
@@ -54,6 +56,13 @@ You can set in env your log file location
 
 ```.env
 LOG_PATH=/your/directory/logs.log
+```
+
+Optimalization use Database
+
+```.env
+  # maximum 14 default 3
+  USE_DATABASE = 5
 ```
 
 # Quickstart
@@ -70,7 +79,7 @@ After server running and you want to make event and maintain event, make request
 
 1. Endpoint
    ```
-   {base-url}/event/{event-key}/{event-relese-in}
+   {{baseurl}}/event/relin/{{key}}
    ```
 
 - base-url : server host and port default `localhost:1407`
@@ -88,32 +97,35 @@ After server running and you want to make event and maintain event, make request
 4. Body
    ```json
    {
-     "Name": "cancel_order",
-     "id": "901ec8dc-8de2-448c-b64c-6f0bc49cabff",
-     "type": "api_event",
-     "job_data": {
-       "endpoint": "https://foo.id/bar",
-       "data": null,
-       "method": "GET",
-       "headers": [
-         {
-           "key": "Token",
-           "value": "b77d808805559c2fa028add373b661a3"
-         },
-         {
-           "key": "App-Version",
-           "value": "6.0.0"
-         },
-         {
-           "key": "Device-Id",
-           "value": "e60c90b865524f76"
-         },
-         {
-           "key": "Content-Type",
-           "value": "application/json"
-         }
-       ]
-     }
+     "event": {
+       "name": "cancel order",
+       "id": "901ec8dc-8de2-448c-b64c-6f0bc49cabff",
+       "type": "api_event",
+       "job_data": {
+         "endpoint": "https://jsonplaceholder.typicode.com/posts/1",
+         "data": null,
+         "method": "GET",
+         "headers": [
+           {
+             "key": "Token",
+             "value": "b77d808805559c2fa028add373b661a3"
+           },
+           {
+             "key": "App-Version",
+             "value": "6.0.0"
+           },
+           {
+             "key": "Device-Id",
+             "value": "e60c90b865524f76"
+           },
+           {
+             "key": "Content-Type",
+             "value": "application/json"
+           }
+         ]
+       }
+     },
+     "release_in": "10h0s"
    }
    ```
 
@@ -129,8 +141,9 @@ After server running and you want to make event and maintain event, make request
 3. Header
 
    ```
-   X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
+   X-CLIENT-NAME:{{client_name}}
+   X-RELEASE-FORMAT:at
    ```
 
 ## Update release event
@@ -138,7 +151,7 @@ After server running and you want to make event and maintain event, make request
 1. Endpoint
 
    ```
-   {base-url}/event/{event-key}/{event-relese-in}
+   {{baseurl}}/event/relin/{{key}}
    ```
 
 2. Methode `PUT`
@@ -147,6 +160,13 @@ After server running and you want to make event and maintain event, make request
    ```
    X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
+   ```
+
+4. Body
+   ```json
+   {
+     "release_in": "3m50s"
+   }
    ```
 
 ## Update data event
@@ -161,8 +181,9 @@ After server running and you want to make event and maintain event, make request
 3. Header
 
    ```
-   X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
+   X-CLIENT-NAME:{{client_name}}
+   X-RELEASE-FORMAT:at
    ```
 
 4. Body
@@ -207,6 +228,7 @@ After server running and you want to make event and maintain event, make request
 3. Header
 
    ```
-   X-CLIENT-NAME:POSTMANT-CLIENT
    Accept-Encoding:application/json
+   X-CLIENT-NAME:{{client_name}}
+   X-RELEASE-FORMAT:at
    ```
