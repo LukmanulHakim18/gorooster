@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/LukmanulHakim18/gorooster/database"
-	"github.com/LukmanulHakim18/gorooster/helpers"
-	"github.com/LukmanulHakim18/gorooster/router"
-	"github.com/LukmanulHakim18/gorooster/services"
 	"net/http"
+
+	"github.com/LukmanulHakim18/gorooster/v2/database"
+	"github.com/LukmanulHakim18/gorooster/v2/helpers"
+	"github.com/LukmanulHakim18/gorooster/v2/router"
+	"github.com/LukmanulHakim18/gorooster/v2/services"
 
 	"github.com/joho/godotenv"
 )
@@ -15,7 +16,7 @@ func main() {
 
 	RedisClient := database.GetRedisClient()
 
-	go services.StartEventListener(*RedisClient)
+	go services.StartEventListeners(RedisClient)
 
 	if err := http.ListenAndServe(helpers.EnvGetString("RUNING_PORT", ":1407"), router.GetRouter()); err != nil {
 		panic(err)

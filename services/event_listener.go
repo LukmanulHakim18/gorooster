@@ -3,37 +3,47 @@ package services
 import (
 	"context"
 	"fmt"
-	"github.com/LukmanulHakim18/gorooster/database"
-	"github.com/LukmanulHakim18/gorooster/helpers"
-	"github.com/LukmanulHakim18/gorooster/logger"
 	"os"
+
+	"github.com/LukmanulHakim18/gorooster/v2/database"
+	"github.com/LukmanulHakim18/gorooster/v2/helpers"
+	"github.com/LukmanulHakim18/gorooster/v2/logger"
+	"github.com/go-redis/redis/v8"
 )
 
-func StartEventListener(client database.RedisClient) {
+func StartEventListeners(client *database.RedisClient) {
+	for dbNumber, client := range client.DB {
+		go StartEventListener(dbNumber, client)
+	}
+}
+
+func StartEventListener(dbNumber int, client *redis.Client) {
 	// init loger use zap
 	logger := logger.GetLogger()
 	// This is telling redis to publish events since it's off by default.
 	// https://redis.io/docs/manual/keyspace-notifications/
-	_, err := client.DB.Do(context.Background(), "CONFIG", "SET", "notify-keyspace-events", "KEA").Result()
+	_, err := client.Do(context.Background(), "CONFIG", "SET", "notify-keyspace-events", "KEA").Result()
 	if err != nil {
 		logger.Log.Errorf("unable to set keyspace events %s", err.Error())
 		os.Exit(1)
 	}
 
-	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", client.DBNumber)
+	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", dbNumber)
 	logger.AddData("key_event_channel", KeyEventChannel)
 
 	// this is telling redis to subscribe to events published in the keyevent channel, specifically for expired events
-	pubsub := client.DB.PSubscribe(context.Background(), KeyEventChannel)
+	pubsub := client.PSubscribe(context.Background(), KeyEventChannel)
 
 	logger.Log.Infow("start service ", logger.Data()...)
 	logger.ClearData()
 
 	eventMapper := NewEventMapper()
-	// Infinite loop for listening event
+	ctx := context.Background()
 	for {
+		logger.ClearData()
+		// Infinite loop for listening event
 		// This listens in the background for messages.
-		message, err := pubsub.ReceiveMessage(context.Background())
+		message, err := pubsub.ReceiveMessage(ctx)
 		if err != nil {
 			logger.Log.Errorw(err.Error(), logger.Data()...)
 			break
@@ -47,14 +57,8 @@ func StartEventListener(client database.RedisClient) {
 		logger.AddData("event_key", key)
 		logger.AddData("data_key", dataKey)
 		// Get real data event from redis
-		ctx := context.Background()
-		dataEventStr := client.DB.Get(ctx, dataKey).Val()
 
-		// Delete data from resis
-		if err = client.DB.Del(ctx, dataKey).Err(); err != nil {
-			logger.Log.Errorw(err.Error(), logger.Data()...)
-		}
-		logger.Log.Infow("create_event", logger.Data()...)
-		go eventMapper.CreateEvent(dataEventStr)
+		go logger.Log.Infow("create_event", logger.Data()...)
+		go eventMapper.CreateEvent(ctx, client, dataKey)
 	}
 }

@@ -3,8 +3,10 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/LukmanulHakim18/gorooster/models"
 	"net/http"
+	"time"
+
+	"github.com/LukmanulHakim18/gorooster/v2/models"
 )
 
 func ResponseSuccessWithData(w http.ResponseWriter, statusCode int, payload any) {
@@ -37,7 +39,20 @@ func ResponseErrorWithData(w http.ResponseWriter, errFmt *Error) {
 // ================================ success format ================================
 type SuccessResponse struct {
 	Event          models.Event `json:"event"`
-	EventReleaseIn string       `json:"event_release_in"`
+	EventReleaseIn string       `json:"event_release_in,omitempty"`
+	EventReleaseAt int64        `json:"event_release_at,omitempty"`
+}
+
+func (sr *SuccessResponse) SetEventRelease(releaseEventFormat string, eventReleaseIn time.Duration) {
+	switch releaseEventFormat {
+	case ReleaseEventAT:
+		sr.EventReleaseAt = time.Now().Add(eventReleaseIn).Unix()
+	case ReleaseEventIN:
+		sr.EventReleaseIn = eventReleaseIn.String()
+	default:
+		sr.EventReleaseAt = time.Now().Add(eventReleaseIn).Unix()
+		sr.EventReleaseIn = eventReleaseIn.String()
+	}
 }
 
 // ================================ error format ================================
@@ -100,5 +115,24 @@ var ErrorReadBody = &Error{
 	LocalizedMessage: Message{
 		English:   "failed to read data",
 		Indonesia: "gagal membaca data",
+	},
+}
+var ErrorTimeReleaseAt = &Error{
+	StatusCode:   http.StatusBadRequest,
+	ErrorCode:    "CROW-401",
+	ErrorMessage: "unable to release past events.",
+	LocalizedMessage: Message{
+		English:   "unable to release past events.",
+		Indonesia: "tidak dapat merilis event masa lalu.",
+	},
+}
+
+var ErrorDuplicateKey = &Error{
+	StatusCode:   http.StatusBadRequest,
+	ErrorCode:    "CROW-402",
+	ErrorMessage: "duplicat key.",
+	LocalizedMessage: Message{
+		English:   "duplicat key.",
+		Indonesia: "kunci duplikat.",
 	},
 }

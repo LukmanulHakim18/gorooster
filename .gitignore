@@ -2,3 +2,4 @@
 logger/data/
 .vscode/
 *.exe
+docker-compose.yaml
