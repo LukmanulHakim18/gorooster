@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"git.bluebird.id/mybb/gorooster/v2/logger"
-	"git.bluebird.id/mybb/gorooster/v2/models"
-	"git.bluebird.id/mybb/gorooster/v2/repositories"
+	"github.com/LukmanulHakim18/gorooster/v2/logger"
+	"github.com/LukmanulHakim18/gorooster/v2/models"
+	"github.com/LukmanulHakim18/gorooster/v2/repositories"
 	"github.com/go-redis/redis/v8"
 )
 
