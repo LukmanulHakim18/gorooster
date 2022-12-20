@@ -1,0 +1,29 @@
+FROM golang:1.18-alpine AS build
+ARG SSH_KEY
+ARG BRANCH_NAME=default
+ARG BUILD_NUMBER=0 
+    
+RUN apk add git && \
+    apk add openssh && \
+    apk add gettext && \
+    apk add build-base 
+
+RUN mkdir -p /root/.ssh
+RUN echo "$SSH_KEY" > /root/.ssh/id_rsa && chmod 0600 /root/.ssh/id_rsa
+
+RUN touch /root/.ssh/known_hosts
+RUN echo -e "Host *\n\tStrictHostKeyChecking no\n\tForwardAgent yes\n\n" > ~/.ssh/config
+
+WORKDIR /app
+COPY . .
+RUN go mod tidy
+RUN git config --global --add url."git@gitssh.bluebird.id:".insteadOf "https://git.bluebird.id"
+RUN envsubst '${BRANCH_NAME},${BUILD_NUMBER}' < sonar-project.properties > sonar.properties
+RUN go test ./... -coverprofile=coverage.out
+
+FROM sonarsource/sonar-scanner-cli
+ARG TOKEN=898434342df7834234
+WORKDIR /app
+COPY --from=build /app /app
+RUN cp sonar.properties /opt/sonar-scanner/conf/sonar-scanner.properties 
+RUN sonar-scanner -Dproject.settings=sonar.properties -Dsonar.go.coverage.reportPaths=coverage.out -Dsonar.qualitygate.wait=true -Dsonar.qualitygate.timeout=3000 -Dsonar.host.url="https://ccq.bluebird.id" -Dsonar.login="$TOKEN"
