@@ -19,7 +19,7 @@ RUN go clean && CGO_ENABLED=0 go build
 RUN ls -all && pwd
 
 FROM gcr.io/distroless/static
-COPY --from=build /app/order-query order-query
-ENTRYPOINT ["./order-query"]
+COPY --from=build /app/gorooster gorooster
+ENTRYPOINT ["./gorooster"]
 
 

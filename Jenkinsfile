@@ -9,11 +9,11 @@ pipeline {
     agent {
         node {
             label 'slave-00 || slave-01'
-            customWorkspace "workspace/${env.BRANCH_NAME}/src/git.bluebird.id/mybb/order-query"
+            customWorkspace "workspace/${env.BRANCH_NAME}/src/git.bluebird.id/mybb/gorooster"
         }
     }
     environment {
-        SERVICE = 'order-query'
+        SERVICE = 'gorooster'
         TEAMS_MICROSOFT = credentials('56abe4aa-f20c-4509-81b3-2d427abc8565')
         PROJECT= "${env.SERVICE}"
         TESTING = "${env.EXECUTOR_NUMBER}-${env.BUILD_NUMBER}"

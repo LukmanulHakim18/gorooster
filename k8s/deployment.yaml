@@ -1,85 +1,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-query
+  name: gorooster
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: order-query
+      app: gorooster
   template:
     metadata:
       labels:
-        app: order-query
+        app: gorooster
     spec:
       containers:
-        - name: order-query
-          image: asia.gcr.io/$NAMESPACE/order-query:$BUILD_NUMBER
+        - name: gorooster
+          image: asia.gcr.io/$NAMESPACE/gorooster:$BUILD_NUMBER
           env:
-            - name: REST_API_PORT
+            - name: RUNING_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: configmap-order-query
-                  key: REST_API_PORT
+                  name: configmap-gorooster
+                  key: RUNING_PORT
 
-            - name: ENV
+            - name: RETRY_MODE
               valueFrom:
                 configMapKeyRef:
-                  name: configmap-order-query
-                  key: ENV
+                  name: configmap-gorooster
+                  key: RETRY_MODE
    
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: secret-order-query-service
-                  key: DB_USERNAME
-
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: secret-order-query-service
-                  key: DB_NAME
-
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: secret-order-query-service
-                  key: DB_PASSWORD
-
-            - name: DB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: secret-order-query-service
-                  key: DB_PORT
-
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: secret-order-query-service
-                  key: DB_HOST
-                  
-            - name: DB_SSL_MODE
+            - name: RETRY_COUNT
               valueFrom:
                 configMapKeyRef:
-                  name: configmap-order-query
-                  key: DB_SSL_MODE
+                  name: configmap-gorooster
+                  key: RETRY_COUNT
 
-            - name: BASIC_AUTH
+            - name: REDIS_SERVER_IP
               valueFrom:
                 secretKeyRef:
-                  name: secret-order-query-service
-                  key: BASIC_AUTH
+                  name: secret-gorooster-service
+                  key: REDIS_SERVER_IP
 
-            - name: GOLDENBIRD_URL
+            - name: REDIS_SERVER_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  name: configmap-order-query
-                  key: GOLDENBIRD_URL
+                secretKeyRef:
+                  name: secret-gorooster-service
+                  key: REDIS_SERVER_PASSWORD
+
+            - name: REDIS_SELECT_DB
+              valueFrom:
+                secretKeyRef:
+                  name: secret-gorooster-service
+                  key: REDIS_SELECT_DB
                   
-            - name: GOLDENBIRD_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: secret-order-query-service
-                  key: GOLDENBIRD_TOKEN
             - name: TZ
               value: Asia/Jakarta
