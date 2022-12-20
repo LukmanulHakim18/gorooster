@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-query
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-query
+  template:
+    metadata:
+      labels:
+        app: order-query
+    spec:
+      containers:
+        - name: order-query
+          image: asia.gcr.io/$NAMESPACE/order-query:$BUILD_NUMBER
+          env:
+            - name: REST_API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-order-query
+                  key: REST_API_PORT
+
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-order-query
+                  key: ENV
+   
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: DB_USERNAME
+
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: DB_NAME
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: DB_PASSWORD
+
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: DB_PORT
+
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: DB_HOST
+                  
+            - name: DB_SSL_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-order-query
+                  key: DB_SSL_MODE
+
+            - name: BASIC_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: BASIC_AUTH
+
+            - name: GOLDENBIRD_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-order-query
+                  key: GOLDENBIRD_URL
+                  
+            - name: GOLDENBIRD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: secret-order-query-service
+                  key: GOLDENBIRD_TOKEN
+            - name: TZ
+              value: Asia/Jakarta
