@@ -3,14 +3,14 @@
 Gorooster is an event scheduler that can schedule the events you want.
 For now, Gorooster only provides events in the form of API requests.
 
-For ease of use it would be nice to use [gorooster-client](https://"github.com/LukmanulHakim18/gorooster/v2.git) as a remote to the server. But if you want to use rest-api go ahead we provide that.
+For ease of use it would be nice to use [gorooster-client](https://"git.bluebird.id/mybb/gorooster/v2.git) as a remote to the server. But if you want to use rest-api go ahead we provide that.
 
 # Features
 
 - Set event release In
 - Set event release At
-- Update release event in
-- Update release event an
+- Update release event In
+- Update release event At
 - Get event
 - Update data event
 - Delete event
@@ -20,7 +20,7 @@ For ease of use it would be nice to use [gorooster-client](https://"github.com/L
 Gorooster requires a Go version with modules support.
 
 ```
-  git clone https://"github.com/LukmanulHakim18/gorooster/v2.git
+  git clone https://"git.bluebird.id/mybb/gorooster/v2.git
 ```
 
 So make sure instal the dependency in your local:
@@ -64,6 +64,8 @@ Optimalization use Database
   # maximum 14 default 3
   USE_DATABASE = 5
 ```
+
+> Gorooster can run with multiple instances, event have locking if one instance do job event, another instance can't execute the event.
 
 # Quickstart
 

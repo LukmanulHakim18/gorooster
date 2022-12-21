@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LukmanulHakim18/gorooster/v2/database"
-	"github.com/LukmanulHakim18/gorooster/v2/helpers"
-	"github.com/LukmanulHakim18/gorooster/v2/logger"
+	"git.bluebird.id/mybb/gorooster/v2/database"
+	"git.bluebird.id/mybb/gorooster/v2/helpers"
+	"git.bluebird.id/mybb/gorooster/v2/logger"
 	"github.com/go-redis/redis/v8"
 )
 

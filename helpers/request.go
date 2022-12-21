@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"github.com/LukmanulHakim18/gorooster/v2/models"
+	"git.bluebird.id/mybb/gorooster/v2/models"
 )
 
 type BodyEventReleaseIn struct {
