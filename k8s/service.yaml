@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gorooster
+  labels:
+    app: gorooster
+  # annotations:
+  #   cloud.google.com/app-protocols: '{"grpc":"HTTP2"}'
+spec:
+  type: NodePort
+  ports:
+    - name: grpc
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: gorooster

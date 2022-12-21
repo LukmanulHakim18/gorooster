@@ -9,6 +9,7 @@ import (
 	"git.bluebird.id/mybb/gorooster/v2/helpers"
 	"git.bluebird.id/mybb/gorooster/v2/logger"
 	"github.com/go-redis/redis/v8"
+	// "github.com/go-redis/redis/v7"
 )
 
 func StartEventListeners(client *database.RedisClient) {

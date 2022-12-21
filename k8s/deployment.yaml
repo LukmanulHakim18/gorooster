@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gorooster
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gorooster
+  template:
+    metadata:
+      labels:
+        app: gorooster
+    spec:
+      containers:
+        - name: gorooster
+          image: asia.gcr.io/$NAMESPACE/gorooster:$BUILD_NUMBER
+          env:
+            - name: RUNING_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-gorooster
+                  key: RUNING_PORT
+
+            - name: RETRY_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-gorooster
+                  key: RETRY_MODE
+   
+            - name: RETRY_COUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap-gorooster
+                  key: RETRY_COUNT
+
+            - name: REDIS_SERVER_IP
+              valueFrom:
+                secretKeyRef:
+                  name: secret-gorooster-service
+                  key: REDIS_SERVER_IP
+
+            - name: REDIS_SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-gorooster-service
+                  key: REDIS_SERVER_PASSWORD
+
+            - name: REDIS_SELECT_DB
+              valueFrom:
+                secretKeyRef:
+                  name: secret-gorooster-service
+                  key: REDIS_SELECT_DB
+                  
+            - name: TZ
+              value: Asia/Jakarta
