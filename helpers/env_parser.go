@@ -36,7 +36,7 @@ func EnvGetBool(key string, defaultValue bool) bool {
 // Get Value(bool) from env
 // And give default value if err parsing
 func EnvGetTimeDuration(key string, defaultValue time.Duration) time.Duration {
-	if val, err := time.ParseDuration(os.Getenv((key))); err != nil {
+	if val, err := time.ParseDuration(os.Getenv((key))); err == nil {
 		return val
 	}
 	return defaultValue
