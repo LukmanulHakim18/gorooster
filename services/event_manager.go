@@ -56,8 +56,8 @@ func (em EventManager) SetEventreleaseIn(clientName, key string, releaseIn time.
 	if err := em.DB[em.DBPointer].Set(ctx, helpers.GenerateKeyEvent(clientName, key), "event-key", releaseIn).Err(); err != nil {
 		return err
 	}
-
-	if err := em.DB[em.DBPointer].Set(ctx, helpers.GenerateKeyData(clientName, key), string(data), releaseIn+em.wipeDataEvent).Err(); err != nil {
+	seftyData := time.Duration(5 * time.Second) // if user set 0 in WIPE_DATA_EVENT
+	if err := em.DB[em.DBPointer].Set(ctx, helpers.GenerateKeyData(clientName, key), string(data), releaseIn+em.wipeDataEvent+seftyData).Err(); err != nil {
 		return err
 	}
 
