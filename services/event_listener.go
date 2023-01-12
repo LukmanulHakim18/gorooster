@@ -12,7 +12,10 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var NeedToRecreateListener *bool
+var (
+	NeedToRecreateListener *bool
+	TimeCheckForConnection *time.Duration
+)
 
 func CheckListener(client *database.RedisClient) {
 	*NeedToRecreateListener = false
@@ -22,7 +25,7 @@ func CheckListener(client *database.RedisClient) {
 			StartEventListeners(client)
 			*NeedToRecreateListener = false
 		}
-		time.Sleep(5 * time.Second)
+		time.Sleep(*TimeCheckForConnection)
 	}
 }
 
@@ -31,8 +34,11 @@ func StartEventListeners(client *database.RedisClient) {
 		go StartEventListener(dbNumber, client)
 	}
 	needToRecreateListener := false
+	timeCheckForConnection := helpers.EnvGetTimeDuration("CHECK_CONNECTION_EVERY", 1*time.Minute)
 	NeedToRecreateListener = &needToRecreateListener
+	TimeCheckForConnection = &timeCheckForConnection
 	CheckListener(client)
+
 }
 
 func StartEventListener(dbNumber int, client *redis.Client) {
