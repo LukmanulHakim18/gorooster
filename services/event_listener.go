@@ -4,18 +4,35 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"git.bluebird.id/mybb/gorooster/v2/database"
 	"git.bluebird.id/mybb/gorooster/v2/helpers"
 	"git.bluebird.id/mybb/gorooster/v2/logger"
 	"github.com/go-redis/redis/v8"
-	// "github.com/go-redis/redis/v7"
 )
+
+var NeedToRecreateListener *bool
+
+func CheckListener(client *database.RedisClient) {
+	*NeedToRecreateListener = false
+	for {
+		if client.IsConnected() && *NeedToRecreateListener {
+			fmt.Println("Restart Listeners")
+			StartEventListeners(client)
+			*NeedToRecreateListener = false
+		}
+		time.Sleep(5 * time.Second)
+	}
+}
 
 func StartEventListeners(client *database.RedisClient) {
 	for dbNumber, client := range client.DB {
 		go StartEventListener(dbNumber, client)
 	}
+	needToRecreateListener := false
+	NeedToRecreateListener = &needToRecreateListener
+	CheckListener(client)
 }
 
 func StartEventListener(dbNumber int, client *redis.Client) {
@@ -62,4 +79,5 @@ func StartEventListener(dbNumber int, client *redis.Client) {
 		go logger.Log.Infow("create_event", logger.Data()...)
 		go eventMapper.CreateEvent(ctx, client, dataKey)
 	}
+	*NeedToRecreateListener = true
 }
