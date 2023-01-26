@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"git.bluebird.id/mybb/gorooster/v2/helpers"
+	"github.com/LukmanulHakim18/gorooster/v2/helpers"
 
 	"github.com/go-redis/redis/v8"
 )

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"git.bluebird.id/mybb/gorooster/v2/models"
+	"github.com/LukmanulHakim18/gorooster/v2/models"
 )
 
 func ResponseSuccessWithData(w http.ResponseWriter, statusCode int, payload any) {

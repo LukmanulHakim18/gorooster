@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"git.bluebird.id/mybb/gorooster/v2/helpers"
+	"github.com/LukmanulHakim18/gorooster/v2/helpers"
 
 	"go.uber.org/zap"
 )

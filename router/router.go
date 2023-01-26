@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"git.bluebird.id/mybb/gorooster/v2/controllers"
+	"github.com/LukmanulHakim18/gorooster/v2/controllers"
 
 	"github.com/go-chi/chi"
 )

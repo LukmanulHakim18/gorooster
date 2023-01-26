@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.bluebird.id/mybb/gorooster/v2/helpers"
-	"git.bluebird.id/mybb/gorooster/v2/logger"
-	"git.bluebird.id/mybb/gorooster/v2/models"
+	"github.com/LukmanulHakim18/gorooster/v2/helpers"
+	"github.com/LukmanulHakim18/gorooster/v2/logger"
+	"github.com/LukmanulHakim18/gorooster/v2/models"
 )
 
 type jobAPIRepository struct {

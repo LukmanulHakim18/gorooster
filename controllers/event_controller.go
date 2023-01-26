@@ -5,14 +5,16 @@ import (
 	"net/http"
 	"time"
 
-	"git.bluebird.id/mybb/gorooster/v2/database"
-	"git.bluebird.id/mybb/gorooster/v2/helpers"
-	"git.bluebird.id/mybb/gorooster/v2/logger"
-	"git.bluebird.id/mybb/gorooster/v2/models"
-	"git.bluebird.id/mybb/gorooster/v2/services"
+	"github.com/LukmanulHakim18/gorooster/v2/database"
+	"github.com/LukmanulHakim18/gorooster/v2/helpers"
+	"github.com/LukmanulHakim18/gorooster/v2/logger"
+	"github.com/LukmanulHakim18/gorooster/v2/models"
+	"github.com/LukmanulHakim18/gorooster/v2/services"
 
 	"github.com/go-chi/chi"
 )
+
+var CLIENT_NAME = "X-CLIENT-NAME"
 
 func GetEvent(w http.ResponseWriter, r *http.Request) {
 	logger := logger.GetLogger()
@@ -32,11 +34,11 @@ func GetEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
 	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
-		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("X-CLIENT-NAME"))
+		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 
@@ -87,11 +89,11 @@ func CreateEventReleaseIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
 	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
-		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("X-CLIENT-NAME"))
+		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 
@@ -149,7 +151,7 @@ func UpdateReleaseEventIn(w http.ResponseWriter, r *http.Request) {
 	}
 	logger.AddData("event_key", eventKey)
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
 
 	err = json.NewDecoder(r.Body).Decode(&bodyEventReleaseIn)
@@ -218,10 +220,10 @@ func UpdateDataEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	logger.AddData("event_key", eventKey)
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
-		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("X-CLIENT-NAME"))
+		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 	logger.AddData("client_name", clientName)
@@ -284,11 +286,11 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
 	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
-		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("X-CLIENT-NAME"))
+		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 
@@ -330,11 +332,11 @@ func CreateEventReleaseAt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
 	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
-		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("X-CLIENT-NAME"))
+		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 
@@ -393,11 +395,11 @@ func UpdateReleaseEventAt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientName := r.Header.Get("X-CLIENT-NAME")
+	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
 	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
-		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("X-CLIENT-NAME"))
+		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 
