@@ -42,7 +42,7 @@ func StartEventListeners(client *database.RedisClient) {
 }
 
 func StartEventListener(dbNumber int, client *redis.Client) {
-	// init loger use zap
+	// init logger use zap
 	logger := logger.GetLogger()
 	// This is telling redis to publish events since it's off by default.
 	// https://redis.io/docs/manual/keyspace-notifications/
@@ -55,7 +55,7 @@ func StartEventListener(dbNumber int, client *redis.Client) {
 	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", dbNumber)
 	logger.AddData("key_event_channel", KeyEventChannel)
 
-	// this is telling redis to subscribe to events published in the keyevent channel, specifically for expired events
+	// this is telling redis to subscribe to events published in the key event channel, specifically for expired events
 	pubsub := client.PSubscribe(context.Background(), KeyEventChannel)
 
 	logger.Log.Infow("start service ", logger.Data()...)

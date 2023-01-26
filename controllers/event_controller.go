@@ -28,7 +28,7 @@ func GetEvent(w http.ResponseWriter, r *http.Request) {
 
 	eventKey := chi.URLParam(r, "event_key")
 	logger.AddData("event_key", eventKey)
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -36,14 +36,14 @@ func GetEvent(w http.ResponseWriter, r *http.Request) {
 
 	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
-	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
 	}
 
 	releaseEventFormat := r.Header.Get("X-RELEASE-FORMAT")
-	releaseEventFormat = helpers.RelaseEventFormator(releaseEventFormat)
+	releaseEventFormat = helpers.ReleaseEventFormatter(releaseEventFormat)
 
 	logger.AddData("release_event_format", releaseEventFormat)
 
@@ -83,7 +83,7 @@ func CreateEventReleaseIn(w http.ResponseWriter, r *http.Request) {
 
 	eventKey := chi.URLParam(r, "event_key")
 	logger.AddData("event_key", eventKey)
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -91,7 +91,7 @@ func CreateEventReleaseIn(w http.ResponseWriter, r *http.Request) {
 
 	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
-	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
@@ -112,7 +112,7 @@ func CreateEventReleaseIn(w http.ResponseWriter, r *http.Request) {
 	}
 	logger.AddData("event_release_in", eventReleaseIn)
 
-	if err := eventManager.SetEventreleaseIn(clientName, eventKey, eventReleaseIn, bodyEventReleaseIn.Event); err != nil {
+	if err := eventManager.SetEventReleaseIn(clientName, eventKey, eventReleaseIn, bodyEventReleaseIn.Event); err != nil {
 		logger.Log.Errorw(err.Error(), logger.Data()...)
 		if err.Error() == "duplicate key" {
 			helpers.ResponseErrorWithData(w, helpers.ErrorDuplicateKey)
@@ -144,7 +144,7 @@ func UpdateReleaseEventIn(w http.ResponseWriter, r *http.Request) {
 
 	eventKey := chi.URLParam(r, "event_key")
 	logger.AddData("event_key", eventKey)
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -213,7 +213,7 @@ func UpdateDataEvent(w http.ResponseWriter, r *http.Request) {
 	)
 
 	eventKey := chi.URLParam(r, "event_key")
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -221,7 +221,7 @@ func UpdateDataEvent(w http.ResponseWriter, r *http.Request) {
 	logger.AddData("event_key", eventKey)
 
 	clientName := r.Header.Get(CLIENT_NAME)
-	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
@@ -238,7 +238,7 @@ func UpdateDataEvent(w http.ResponseWriter, r *http.Request) {
 	logger.AddData("event", event)
 
 	releaseEventFormat := r.Header.Get("X-RELEASE-FORMAT")
-	releaseEventFormat = helpers.RelaseEventFormator(releaseEventFormat)
+	releaseEventFormat = helpers.ReleaseEventFormatter(releaseEventFormat)
 	logger.AddData("release_event_format", releaseEventFormat)
 
 	err = eventManager.UpdateDataEvent(clientName, eventKey, event)
@@ -280,7 +280,7 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 
 	eventKey := chi.URLParam(r, "event_key")
 	logger.AddData("event_key", eventKey)
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -288,7 +288,7 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 
 	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
-	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
@@ -326,7 +326,7 @@ func CreateEventReleaseAt(w http.ResponseWriter, r *http.Request) {
 
 	eventKey := chi.URLParam(r, "event_key")
 	logger.AddData("event_key", eventKey)
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -334,7 +334,7 @@ func CreateEventReleaseAt(w http.ResponseWriter, r *http.Request) {
 
 	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
-	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return
@@ -389,7 +389,7 @@ func UpdateReleaseEventAt(w http.ResponseWriter, r *http.Request) {
 
 	eventKey := chi.URLParam(r, "event_key")
 	logger.AddData("event_key", eventKey)
-	if ok := helpers.ValidatorClinetNameAndKey(eventKey); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(eventKey); !ok {
 		logger.Log.Errorw("error_event_key", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField("event_key"))
 		return
@@ -397,7 +397,7 @@ func UpdateReleaseEventAt(w http.ResponseWriter, r *http.Request) {
 
 	clientName := r.Header.Get(CLIENT_NAME)
 	logger.AddData("client_name", clientName)
-	if ok := helpers.ValidatorClinetNameAndKey(clientName); !ok {
+	if ok := helpers.ValidatorClientNameAndKey(clientName); !ok {
 		logger.Log.Errorw("error_client_name", logger.Data()...)
 		helpers.ResponseErrorWithData(w, helpers.ErrorReadField(CLIENT_NAME))
 		return

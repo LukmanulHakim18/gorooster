@@ -53,11 +53,11 @@ func GenerateKeyLocking(key string) string {
 	return keyData
 }
 
-func ValidatorClinetNameAndKey(str string) bool {
+func ValidatorClientNameAndKey(str string) bool {
 	return !strings.Contains(str, ":") && str != ""
 }
 
-func RelaseEventFormator(ReleaseEventFormat string) string {
+func ReleaseEventFormatter(ReleaseEventFormat string) string {
 	if ReleaseEventFormat == "" {
 		ReleaseEventFormat = ReleaseEventIN
 	}

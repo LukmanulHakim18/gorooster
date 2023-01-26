@@ -42,7 +42,7 @@ REDIS_SELECT_DB= 14
 This service runs on the default port: `1407` but if you want to change it, just add the following code to the .env file
 
 ```
-RUNING_PORT= :1407
+RUNNING_PORT= :1407
 ```
 
 This service also has a retry fire event mode, if the endpoint that is scheduled to be requested returns a response code not 2xx. Then this mode will retry hit until it succeeds or until reach the `RETRY_COUNT`.

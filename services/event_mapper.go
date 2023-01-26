@@ -24,7 +24,7 @@ func (m Mapper) CreateEvent(ctx context.Context, client *redis.Client, dataKey s
 	logger := logger.GetLogger()
 
 	defer m.Unlock(ctx, client, dataKey)
-	// locking event for create event only this instence service
+	// locking event for create event only this instance service
 	if m.Lock(ctx, client, dataKey) {
 		eventString := client.Get(ctx, dataKey).Val() // Get real data event from redis
 		if eventString == "" {

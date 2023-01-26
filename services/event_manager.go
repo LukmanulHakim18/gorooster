@@ -40,7 +40,7 @@ func (em EventManager) GetEvent(clientName, key string, target interface{}) (eve
 	return
 }
 
-func (em EventManager) SetEventreleaseIn(clientName, key string, releaseIn time.Duration, event models.Event) error {
+func (em EventManager) SetEventReleaseIn(clientName, key string, releaseIn time.Duration, event models.Event) error {
 	ctx := context.Background()
 	data, err := json.Marshal(event)
 	if err != nil {
