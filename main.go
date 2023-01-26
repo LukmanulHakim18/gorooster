@@ -18,7 +18,7 @@ func main() {
 
 	go services.StartEventListeners(RedisClient)
 
-	if err := http.ListenAndServe(helpers.EnvGetString("RUNING_PORT", ":1407"), router.GetRouter()); err != nil {
+	if err := http.ListenAndServe(helpers.EnvGetString("RUNNING_PORT", ":1407"), router.GetRouter()); err != nil {
 		panic(err)
 	}
 

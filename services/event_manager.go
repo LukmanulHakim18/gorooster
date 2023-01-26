@@ -17,9 +17,11 @@ type EventManager struct {
 }
 
 func GetServiceEventManager(redisClient *database.RedisClient) EventManager {
+	dumpData := helpers.EnvGetTimeDuration("WIPE_DATA_EVENT", 24*time.Hour)
+	safetyData := time.Duration(5*time.Second) + dumpData // if user set 0 in WIPE_DATA_EVENT
 	return EventManager{
 		redisClient,
-		helpers.EnvGetTimeDuration("WIPE_DATA_EVENT", 24*time.Hour),
+		safetyData,
 	}
 }
 
@@ -38,7 +40,7 @@ func (em EventManager) GetEvent(clientName, key string, target interface{}) (eve
 	return
 }
 
-func (em EventManager) SetEventreleaseIn(clientName, key string, releaseIn time.Duration, event models.Event) error {
+func (em EventManager) SetEventReleaseIn(clientName, key string, releaseIn time.Duration, event models.Event) error {
 	ctx := context.Background()
 	data, err := json.Marshal(event)
 	if err != nil {
@@ -56,7 +58,6 @@ func (em EventManager) SetEventreleaseIn(clientName, key string, releaseIn time.
 	if err := em.DB[em.DBPointer].Set(ctx, helpers.GenerateKeyEvent(clientName, key), "event-key", releaseIn).Err(); err != nil {
 		return err
 	}
-
 	if err := em.DB[em.DBPointer].Set(ctx, helpers.GenerateKeyData(clientName, key), string(data), releaseIn+em.wipeDataEvent).Err(); err != nil {
 		return err
 	}

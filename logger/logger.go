@@ -13,9 +13,9 @@ type LoggerImpl struct {
 
 func GetLogger() *LoggerImpl {
 	logConfig := helpers.GetZapLoggerSetup()
-	loggerInstence := zap.Must(logConfig.Build())
-	defer loggerInstence.Sync()
-	sugar := loggerInstence.Sugar()
+	loggerInstance := zap.Must(logConfig.Build())
+	defer loggerInstance.Sync()
+	sugar := loggerInstance.Sugar()
 
 	logger := &LoggerImpl{
 		Log: sugar,

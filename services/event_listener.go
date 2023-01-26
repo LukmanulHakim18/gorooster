@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/LukmanulHakim18/gorooster/v2/database"
 	"github.com/LukmanulHakim18/gorooster/v2/helpers"
@@ -11,14 +12,37 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+var (
+	NeedToRecreateListener *bool
+	TimeCheckForConnection *time.Duration
+)
+
+func CheckListener(client *database.RedisClient) {
+	*NeedToRecreateListener = false
+	for {
+		if client.IsConnected() && *NeedToRecreateListener {
+			fmt.Println("Restart Listeners")
+			StartEventListeners(client)
+			*NeedToRecreateListener = false
+		}
+		time.Sleep(*TimeCheckForConnection)
+	}
+}
+
 func StartEventListeners(client *database.RedisClient) {
 	for dbNumber, client := range client.DB {
 		go StartEventListener(dbNumber, client)
 	}
+	needToRecreateListener := false
+	timeCheckForConnection := helpers.EnvGetTimeDuration("CHECK_CONNECTION_EVERY", 1*time.Minute)
+	NeedToRecreateListener = &needToRecreateListener
+	TimeCheckForConnection = &timeCheckForConnection
+	CheckListener(client)
+
 }
 
 func StartEventListener(dbNumber int, client *redis.Client) {
-	// init loger use zap
+	// init logger use zap
 	logger := logger.GetLogger()
 	// This is telling redis to publish events since it's off by default.
 	// https://redis.io/docs/manual/keyspace-notifications/
@@ -31,7 +55,7 @@ func StartEventListener(dbNumber int, client *redis.Client) {
 	KeyEventChannel := fmt.Sprintf("__keyevent@%d__:expired", dbNumber)
 	logger.AddData("key_event_channel", KeyEventChannel)
 
-	// this is telling redis to subscribe to events published in the keyevent channel, specifically for expired events
+	// this is telling redis to subscribe to events published in the key event channel, specifically for expired events
 	pubsub := client.PSubscribe(context.Background(), KeyEventChannel)
 
 	logger.Log.Infow("start service ", logger.Data()...)
@@ -61,4 +85,5 @@ func StartEventListener(dbNumber int, client *redis.Client) {
 		go logger.Log.Infow("create_event", logger.Data()...)
 		go eventMapper.CreateEvent(ctx, client, dataKey)
 	}
+	*NeedToRecreateListener = true
 }
