@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"sync"
 
 	"github.com/LukmanulHakim18/gorooster/v2/helpers"
@@ -50,4 +51,10 @@ func (rc *RedisClient) Next() {
 	if rc.DBPointer > rc.UseDB {
 		rc.DBPointer = 1
 	}
+}
+
+// isConnect
+func (rc *RedisClient) IsConnected() bool {
+	ping := rc.DBIndex.Ping(context.Background()).Val()
+	return ping == "PONG"
 }

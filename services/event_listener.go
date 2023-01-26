@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/LukmanulHakim18/gorooster/v2/database"
 	"github.com/LukmanulHakim18/gorooster/v2/helpers"
@@ -11,10 +12,33 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+var (
+	NeedToRecreateListener *bool
+	TimeCheckForConnection *time.Duration
+)
+
+func CheckListener(client *database.RedisClient) {
+	*NeedToRecreateListener = false
+	for {
+		if client.IsConnected() && *NeedToRecreateListener {
+			fmt.Println("Restart Listeners")
+			StartEventListeners(client)
+			*NeedToRecreateListener = false
+		}
+		time.Sleep(*TimeCheckForConnection)
+	}
+}
+
 func StartEventListeners(client *database.RedisClient) {
 	for dbNumber, client := range client.DB {
 		go StartEventListener(dbNumber, client)
 	}
+	needToRecreateListener := false
+	timeCheckForConnection := helpers.EnvGetTimeDuration("CHECK_CONNECTION_EVERY", 1*time.Minute)
+	NeedToRecreateListener = &needToRecreateListener
+	TimeCheckForConnection = &timeCheckForConnection
+	CheckListener(client)
+
 }
 
 func StartEventListener(dbNumber int, client *redis.Client) {
@@ -61,4 +85,5 @@ func StartEventListener(dbNumber int, client *redis.Client) {
 		go logger.Log.Infow("create_event", logger.Data()...)
 		go eventMapper.CreateEvent(ctx, client, dataKey)
 	}
+	*NeedToRecreateListener = true
 }

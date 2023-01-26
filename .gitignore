@@ -1,5 +1,6 @@
 .env
 logger/data/
+*.log
 .vscode/
 *.exe
 docker-compose.yaml
